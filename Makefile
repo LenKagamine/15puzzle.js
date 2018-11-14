@@ -3,10 +3,9 @@ CXXFLAGS = -std=c++14 -Wall -Werror
 export EMCC_DEBUG=1
 
 web: obj/wasm.o obj/Board.o obj/DisjointDatabase.o obj/PartialDatabase.o obj/Pattern.o
-	$(CXX) --bind --std=c++14 -o web/puzzle.js $^ \
+	$(CXX) --bind --std=c++14 -o web/js/puzzle.js $^ \
 		--post-js src/post.js \
-		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 \
-		-s "EXTRA_EXPORTED_RUNTIME_METHODS=['addOnPostRun']"
+		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 
 obj/wasm.o: src/wasm.cpp include/Board.h include/DisjointDatabase.h include/Idastar.h include/Idastar-inl.h | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
@@ -24,4 +23,4 @@ obj:
 
 .PHONY: clean
 clean:
-	rm -r web/puzzle.js web/puzzle.wasm obj/
+	rm -r web/js/puzzle.js web/js/puzzle.wasm obj/

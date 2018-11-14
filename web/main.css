@@ -1,3 +1,7 @@
+* {
+  font-family: 'Lato', sans-serif;
+}
+
 #root {
   position: relative;
   width: 500px;
@@ -20,4 +24,14 @@
   width: 90%;
   height: 90%;
   border: 1px solid black;
+  font-size: 50px;
+}
+
+.config {
+  margin-left: 10px;
+}
+
+.error {
+  display: none;
+  color: red;
 }

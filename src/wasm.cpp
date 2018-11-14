@@ -9,13 +9,12 @@
 typedef std::vector<std::vector<int>> Vec2Int;
 typedef std::vector<Vec2Int> Vec3Int;
 
-DisjointDatabase* db = nullptr;
 Idastar<DisjointDatabase, Board>* search = nullptr;
 
 void setup(Vec3Int grids) {
     const int WIDTH = grids[0][0].size(), HEIGHT = grids[0].size();
 
-    db = new DisjointDatabase(WIDTH * HEIGHT, "def", grids);
+    DisjointDatabase* db = new DisjointDatabase(WIDTH * HEIGHT, "def", grids);
     search = new Idastar<DisjointDatabase, Board>(db);
 }
 
