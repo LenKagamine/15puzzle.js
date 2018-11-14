@@ -33,7 +33,7 @@ function getPattern(name) {
   };
 }
 
-const root = document.getElementById("root");
+const root = document.getElementById("board");
 // Board
 const widthInput = document.getElementById("board-width");
 const heightInput = document.getElementById("board-height");
@@ -88,7 +88,7 @@ const testBoards = [
   [[2, 7, 11, 5], [13, 0, 9, 4], [14, 1, 8, 6], [10, 3, 12, 15]], // 40
   [[9, 5, 8, 13], [7, 11, 1, 2], [12, 4, 6, 0], [10, 14, 15, 3]], // 49
   [[15, 14, 1, 6], [9, 11, 4, 12], [0, 10, 7, 3], [13, 8, 5, 2]], // 52
-  [[5, 6, 13, 4], [10, 0, 12, 14], [11, 8, 9, 2], [15, 7, 3, 1]] // 56
+  // [[5, 6, 13, 4], [10, 0, 12, 14], [11, 8, 9, 2], [15, 7, 3, 1]] // 56
 ];
 
 let selectedPattern = null;

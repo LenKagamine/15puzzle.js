@@ -8,53 +8,57 @@
 	<link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<div>
-		<div id="root"></div>
+	<div class="center">
+		<div class="grid">
+			<h1 id="title">15 Puzzle</h1>
+			<div id="board"></div>
+			<div id="config">
+				<p>Patterns</p>
+				<div class="config">
+					<select id="pattern-select">
+						<option value="8-reg">8 Reg (3x3)</option>
+						<option value="8-rev">8 Rev (3x3)</option>
+						<option value="443-reg">443 Reg (4x3)</option>
+						<option value="555-reg">555 Reg (4x4)</option>
+						<option value="555-rev">555 Rev (4x4)</option>
+					</select>
+					<button id="setup-btn" disabled>Setup</button>
+					<p id="selected-pattern">No selected pattern</p>
+					<p id="error-size" class="error">Error: Mismatching size</p>
+					<p id="error-dir" class="error">Error: Mismatching direction</p>
+				</div>
+				<p>Board</p>
+				<div class="config">
+					<div>
+						<span>Width</span>
+						<input id="board-width" placeholder="Width" value="3" />
+					</div>
+					<div>
+						<span>Height</span>
+						<input id="board-height" placeholder="Height" value="3" />
+					</div>
+					<div>
+						<span>Regular (bottom-left blank)</span>
+						<input type="checkbox" id="direction" checked />
+					</div>
+					<button id="new-board">Load Board</button>
+					<div>
+						<button id="scramble-board">Scramble Board</button>
+						<button id="reset-board">Reset Board</button>
+					</div>
+				</div>
+				<p>Solver</p>
+				<div class="config">
+					<button id="solve-btn" disabled>Solve</button>
+					<div>
+						<input id="moves-input" placeholder="Moves" />
+						<button id="apply-btn">Apply Moves</button>
+					</div>
+					<button id="test-btn">Quick Test</button>
+				</div>
+			</div>
+		</div>
 	</div>
-	<p>Patterns</p>
-	<div class="config">
-		<select id="pattern-select">
-			<option value="8-reg">8 Reg (3x3)</option>
-			<option value="8-rev">8 Rev (3x3)</option>
-			<option value="443-reg">443 Reg (4x3)</option>
-			<option value="555-reg">555 Reg (4x4)</option>
-			<option value="555-rev">555 Rev (4x4)</option>
-		</select>
-		<button id="setup-btn" disabled>Setup</button>
-		<p id="selected-pattern">No selected pattern</p>
-		<p id="error-size" class="error">Error: Mismatching size</p>
-		<p id="error-dir" class="error">Error: Mismatching direction</p>
-	</div>
-	<p>Board</p>
-	<div class="config">
-		<div>
-			<span>Width</span>
-			<input id="board-width" placeholder="Width" value="3" />
-		</div>
-		<div>
-			<span>Height</span>
-			<input id="board-height" placeholder="Height" value="3" />
-		</div>
-		<div>
-			<span>Regular (bottom-left blank)</span>
-			<input type="checkbox" id="direction" checked />
-		</div>
-		<button id="new-board">Load Board</button>
-		<div>
-			<button id="scramble-board">Scramble Board</button>
-			<button id="reset-board">Reset Board</button>
-		</div>
-	</div>
-	<p>Solver</p>
-	<div class="config">
-		<button id="solve-btn" disabled>Solve</button>
-		<div>
-			<input id="moves-input" placeholder="Moves" />
-			<button id="apply-btn">Apply Moves</button>
-		</div>
-		<button id="test-btn">Quick Test</button>
-	</div>
-  <!-- <script type="text/javascript" src="puzzle.js"></script> -->
   <script type="text/javascript" src="js/Tile.js"></script>
   <script type="text/javascript" src="js/Board.js"></script>
   <script type="text/javascript" src="js/Solver.js"></script>
