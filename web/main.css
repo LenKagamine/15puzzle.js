@@ -10,6 +10,10 @@ body {
   padding: 0;
 }
 
+span, input, select, button {
+  font-size: 14px;
+}
+
 .center {
   min-width: 100%;
   min-height: 100%;

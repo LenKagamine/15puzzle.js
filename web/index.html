@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="description" content="Generalized 15 Puzzle Solver">
 	<title>15 Puzzle</title>
 	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	<link rel="stylesheet" href="main.css">
@@ -13,7 +14,7 @@
 			<h1 id="title">15 Puzzle</h1>
 			<div id="board"></div>
 			<div id="config">
-				<p>Patterns</p>
+				<h2>Patterns</h2>
 				<div class="config">
 					<select id="pattern-select">
 						<option value="8-reg">8 Reg (3x3)</option>
@@ -27,7 +28,7 @@
 					<p id="error-size" class="error">Error: Mismatching size</p>
 					<p id="error-dir" class="error">Error: Mismatching direction</p>
 				</div>
-				<p>Board</p>
+				<h2>Board</h2>
 				<div class="config">
 					<div>
 						<span>Width</span>
@@ -47,7 +48,7 @@
 						<button id="reset-board">Reset Board</button>
 					</div>
 				</div>
-				<p>Solver</p>
+				<h2>Solver</h2>
 				<div class="config">
 					<button id="solve-btn" disabled>Solve</button>
 					<div>
