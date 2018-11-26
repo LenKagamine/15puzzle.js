@@ -1,6 +1,3 @@
 obj/
 
-web/js/puzzle.js
-web/js/puzzle.wasm
-
 .DS_Store
