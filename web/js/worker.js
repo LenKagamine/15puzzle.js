@@ -1,5 +1,3 @@
-self.importScripts("puzzle.js");
-
 /* Messages:
 
 From main thread:
@@ -17,6 +15,8 @@ From worker thread:
 - READY()
   - when Module is loaded
 */
+
+const Module = {};
 
 Module.onRuntimeInitialized = () => {
   self.onmessage = ({ data }) => {
@@ -36,3 +36,5 @@ Module.onRuntimeInitialized = () => {
 
   self.postMessage({ type: "READY" });
 };
+
+self.importScripts("puzzle.js");

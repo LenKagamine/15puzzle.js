@@ -111,7 +111,7 @@ You can read more about C++ bindings at the [Emscripten docs](https://kripken.gi
 
 ## Results
 
-Compared against the native C++ solver, the Wasm solver takes ~1.7 to 2x longer.
+Compared against the native C++ solver, the Wasm solver takes ~2x longer.
 
 All 8-puzzle boards can be solve in a fraction of a second. The hardest 8-puzzle boards take 31 moves to solve, and even those are solved instantly.
 

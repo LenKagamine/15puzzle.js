@@ -1,9 +1,10 @@
 CXX = em++
-CXXFLAGS = -std=c++14 -Wall -Werror
+CXXFLAGS = -std=c++14 -Wall -Werror \
+	-O3 --closure 1 --llvm-lto 1 -s FILESYSTEM=0 -s ENVIRONMENT=worker
 export EMCC_DEBUG=1
 
 web: obj/wasm.o obj/Board.o obj/DisjointDatabase.o obj/PartialDatabase.o obj/Pattern.o
-	$(CXX) --bind --std=c++14 -o web/js/puzzle.js $^ \
+	$(CXX) $(CXXFLAGS) --bind -o web/js/puzzle.js $^ \
 		--post-js src/post.js \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 
