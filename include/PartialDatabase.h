@@ -22,7 +22,6 @@ public:
     virtual ~PartialDatabase();
 
     void generateDists();
-    void saveDists();
 };
 
 #endif  // PARTIALDATABASE_H

@@ -3,7 +3,6 @@
 #include "../include/Pattern.h"
 
 #include <chrono>
-#include <fstream>
 #include <iostream>
 #include <queue>
 
@@ -20,25 +19,9 @@ PartialDatabase::PartialDatabase(std::vector<std::vector<int>> grid,
         }
     }
 
-    std::ifstream file(filename, std::ios::in | std::ios::binary);
-    if (!file.good()) {
-        // Database file missing, generate database
-        std::cout << "Generating database" << std::endl;
-        generateDists();
-        saveDists();
-    }
-    else {
-        // Read database from file
-        std::cout << "Parsing database" << std::endl;
-
-        uint64_t id;
-        int dist;
-
-        while (file.read((char*)&id, sizeof(id)) &&
-               file.read((char*)&dist, sizeof(dist))) {
-            distMap[id] = dist;
-        }
-    }
+    // Generate database (don't save to disk in Wasm)
+    std::cout << "Generating database" << std::endl;
+    generateDists();
 
     std::cout << "Number of entries: " << distMap.size() << std::endl;
 
@@ -107,27 +90,6 @@ void PartialDatabase::generateDists() {
                          .count()) /
                     1000000.0;
     std::cout << "Time taken: " << duration << std::endl;
-}
-
-void PartialDatabase::saveDists() {
-    // Store file
-    std::ofstream file(filename, std::ios::out | std::ios::binary);
-    if (!file.good()) {
-        std::cerr << "Could not generate database file: " + filename
-                  << std::endl;
-    }
-    else {
-        // Board dimensions (width, height)
-        // file << board.grid[0].size() << " " << board.grid.size() << endl;
-        // Number of cells, locations of cells (id)
-        // file << board.cells.size() << " " << board.getId() << endl;
-        for (const auto& it : distMap) {
-            file.write((char*)&(it.first), sizeof(it.first));
-            file.write((char*)&(it.second), sizeof(it.second));
-        }
-
-        file.close();
-    }
 }
 
 PartialDatabase::~PartialDatabase() {}
