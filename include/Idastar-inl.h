@@ -1,7 +1,6 @@
 #include "Idastar.h"
 
 #include <future>
-#include <iostream>
 #include <thread>
 
 #define INF 1000000
@@ -22,25 +21,15 @@ std::vector<typename TState::Move> Idastar<THeuristic, TState>::solve(
     path.clear();
     found = false;
 
-    std::cout << "Running single threaded" << std::endl;
-
     limit = heuristic->getHeuristic(start);
 
     if (limit > 0) {
-        std::cout << "Limit, Nodes:";
-
         Move prevMove = Move::Null;
         while (path.size() == 0) {
             minCost = INF;
-            std::cout << " " << limit << ", " << nodes << std::endl;
             dfs(start, 0, prevMove);
             limit = minCost;
         }
-
-        std::cout << "Nodes expanded: " << nodes << std::endl;
-    }
-    else {
-        std::cout << "Already solved" << std::endl;
     }
 
     return path;

@@ -1,7 +1,6 @@
 #include "../include/Board.h"
 
 #include <iomanip>
-#include <iostream>
 
 using Move = Board::Move;
 
@@ -153,38 +152,3 @@ void Board::undoMove(Move dir) {
 }
 
 Board::~Board() {}
-
-std::ostream& operator<<(std::ostream& out, const Move& move) {
-    switch (move) {
-        case Move::U:
-            out << "D";
-            break;
-        case Move::R:
-            out << "L";
-            break;
-        case Move::D:
-            out << "U";
-            break;
-        case Move::L:
-            out << "R";
-            break;
-        default:
-            break;
-    }
-    return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const Board& board) {
-    for (int y = 0; y < board.HEIGHT; y++) {
-        for (int x = 0; x < board.WIDTH; x++) {
-            if (x == board.blank.x && y == board.blank.y) {
-                out << std::setw(3) << 0;
-            }
-            else {
-                out << std::setw(3) << board.getCell(x, y);
-            }
-        }
-        out << std::endl;
-    }
-    return out;
-}

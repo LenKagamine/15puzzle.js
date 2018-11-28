@@ -1,5 +1,4 @@
 #include <emscripten/bind.h>
-#include <chrono>
 #include <vector>
 
 #include "../include/Board.h"
@@ -21,23 +20,12 @@ void setup(Vec3Int grids) {
 std::vector<int> solve(Vec2Int board) {
     Board startBoard(board);
 
-    auto solveBegin = std::chrono::steady_clock::now();
     std::vector<Board::Move> moves = search->solve(startBoard);
-    auto solveEnd = std::chrono::steady_clock::now();
 
-    std::cout << "Solve time taken: "
-             << (std::chrono::duration_cast<std::chrono::microseconds>(solveEnd - solveBegin)
-                    .count()) /
-                    1000000.0
-             << std::endl << std::endl;
-
-    std::cout << "Solution: ";
     std::vector<int> solution;
     for (auto it = moves.rbegin(); it != moves.rend(); ++it) {
-        std::cout << *it << " ";
         solution.push_back(static_cast<int>(*it));
     }
-    std::cout << std::endl;
 
     return solution;
 }

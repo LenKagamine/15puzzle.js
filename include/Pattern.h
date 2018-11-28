@@ -4,7 +4,6 @@
 #include "Direction.h"
 #include "Point.h"
 
-#include <ostream>
 #include <vector>
 
 class Pattern {
@@ -25,8 +24,6 @@ public:
     bool canShift(int index, Direction dir);
     uint64_t getShiftId(int index, Direction dir);
     void shiftCell(int index, Direction dir);
-
-    friend std::ostream& operator<<(std::ostream& out, const Pattern& pattern);
 };
 
 #endif  // PATTERN_H

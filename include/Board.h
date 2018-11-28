@@ -3,7 +3,6 @@
 
 #include "Point.h"
 
-#include <ostream>
 #include <vector>
 
 class Board {
@@ -31,9 +30,6 @@ public:
     const std::vector<Move>& getMoves(Move prevMove);
     int applyMove(Move dir);
     void undoMove(Move dir);
-
-    friend std::ostream& operator<<(std::ostream& out, const Move& move);
-    friend std::ostream& operator<<(std::ostream& out, const Board& board);
 };
 
 #endif  // BOARD_H

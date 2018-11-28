@@ -5,6 +5,7 @@
 #include "Pattern.h"
 #include "flat_hash_map.h"
 
+#include <string>
 #include <unordered_map>
 #include <vector>
 

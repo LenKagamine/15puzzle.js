@@ -1,8 +1,5 @@
 #include "../include/Pattern.h"
 
-#include <iomanip>
-#include <iostream>
-#include <ostream>
 #include <vector>
 
 Pattern::Pattern(std::vector<std::vector<int>> g)
@@ -110,13 +107,3 @@ void Pattern::shiftCell(int index, Direction dir) {
 }
 
 Pattern::~Pattern() {}
-
-std::ostream& operator<<(std::ostream& out, const Pattern& pattern) {
-    for (int y = 0; y < pattern.HEIGHT; y++) {
-        for (int x = 0; x < pattern.WIDTH; x++) {
-            out << std::setw(3) << pattern.getCell(x, y);
-        }
-        out << std::endl;
-    }
-    return out;
-}
