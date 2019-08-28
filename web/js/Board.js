@@ -16,6 +16,10 @@ function Board(width, height, direction) {
   const tileWidth = 100 / width;
   const tileHeight = 100 / height;
 
+  const boardEl = document.getElementById('board');
+
+  boardEl.style.borderColor = '#000';
+
   const tiles = nums.reduce((acc, num) => {
     if (num === 0) return acc;
     const index = direction ? num - 1 : num;
@@ -24,7 +28,10 @@ function Board(width, height, direction) {
       0 | (index / width),
       num,
       tileWidth,
-      tileHeight
+      tileHeight,
+      width,
+      height,
+      direction
     );
 
     tile.onClick(() => {
@@ -52,21 +59,21 @@ function Board(width, height, direction) {
     }
     box = b;
 
-    box.innerHTML = "";
+    box.innerHTML = '';
     Object.values(tiles).forEach(tile => tile && tile.attach(box));
 
-    document.addEventListener("keydown", this.onKeyDown);
+    document.addEventListener('keydown', this.onKeyDown);
   };
 
   this.onKeyDown = e => {
-    if (e.code === "KeyW" || e.code === "ArrowUp") this.moveUp();
-    if (e.code === "KeyD" || e.code === "ArrowRight") this.moveRight();
-    if (e.code === "KeyS" || e.code === "ArrowDown") this.moveDown();
-    if (e.code === "KeyA" || e.code === "ArrowLeft") this.moveLeft();
+    if (e.code === 'KeyW' || e.code === 'ArrowUp') this.moveUp();
+    if (e.code === 'KeyD' || e.code === 'ArrowRight') this.moveRight();
+    if (e.code === 'KeyS' || e.code === 'ArrowDown') this.moveDown();
+    if (e.code === 'KeyA' || e.code === 'ArrowLeft') this.moveLeft();
   };
 
   this.detach = () => {
-    document.removeEventListener("keydown", this.onKeyDown);
+    document.removeEventListener('keydown', this.onKeyDown);
     box = null;
   };
 
@@ -79,6 +86,8 @@ function Board(width, height, direction) {
       nums[tileIndex] = 0;
       nums[blankIndex] = tileNum;
       blank.y += 1;
+
+      this.verify();
     }
   };
 
@@ -91,6 +100,8 @@ function Board(width, height, direction) {
       nums[tileIndex] = 0;
       nums[blankIndex] = tileNum;
       blank.x -= 1;
+
+      this.verify();
     }
   };
 
@@ -103,6 +114,8 @@ function Board(width, height, direction) {
       nums[tileIndex] = 0;
       nums[blankIndex] = tileNum;
       blank.y -= 1;
+
+      this.verify();
     }
   };
 
@@ -115,6 +128,8 @@ function Board(width, height, direction) {
       nums[tileIndex] = 0;
       nums[blankIndex] = tileNum;
       blank.x += 1;
+
+      this.verify();
     }
   };
 
@@ -168,6 +183,14 @@ function Board(width, height, direction) {
       } else {
         tiles[newNum].setPosition(x, y);
       }
+    }
+  };
+
+  this.verify = () => {
+    if (nums.some(n => n !== 0 && !tiles[n].correctPos())) {
+      boardEl.style.borderColor = '#a00';
+    } else {
+      boardEl.style.borderColor = '#000';
     }
   };
 

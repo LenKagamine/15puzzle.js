@@ -1,3 +1,21 @@
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'),
+       url('fonts/lato-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('fonts/lato-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'),
+       url('fonts/lato-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('fonts/lato-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
 * {
   font-family: "Lato", sans-serif;
 }
@@ -53,9 +71,10 @@ span, input, select, button {
   position: relative;
   width: 50vmin;
   height: 50vmin;
-  border: 1px solid black;
-  border-radius: 4%;
+  border: 2px solid black;
+  border-radius: 6px;
   grid-area: board;
+  user-select: none;
 }
 
 #config {
@@ -77,8 +96,7 @@ span, input, select, button {
   width: 90%;
   height: 90%;
   border: 1px solid black;
-  font-size: 6vmin;
-  border-radius: 10%;
+  border-radius: 6px;
 }
 
 .config {

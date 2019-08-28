@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 function toMoves(sol) {
-  const MOVES = ["Null", "D", "L", "U", "R"];
+  const MOVES = ['Null', 'D', 'L', 'U', 'R'];
   return sol.map(m => MOVES[m]);
 }
 
@@ -20,7 +20,7 @@ function getPattern(name) {
 
   if (!pattern) return null;
 
-  const dir = name.split("-")[1] === "reg";
+  const dir = name.split('-')[1] === 'reg';
   const width = PATTERNS[name][0][0].length;
   const height = PATTERNS[name][0].length;
 
@@ -33,47 +33,47 @@ function getPattern(name) {
   };
 }
 
-const root = document.getElementById("board");
+const root = document.getElementById('board');
 // Board
-const widthInput = document.getElementById("board-width");
-const heightInput = document.getElementById("board-height");
-const directionInput = document.getElementById("direction");
-const boardBtn = document.getElementById("new-board");
-const resetBtn = document.getElementById("reset-board");
-const scrambleBtn = document.getElementById("scramble-board");
+const widthInput = document.getElementById('board-width');
+const heightInput = document.getElementById('board-height');
+const directionInput = document.getElementById('direction');
+const boardBtn = document.getElementById('new-board');
+const resetBtn = document.getElementById('reset-board');
+const scrambleBtn = document.getElementById('scramble-board');
 // Solver
-const solveBtn = document.getElementById("solve-btn");
-const movesInput = document.getElementById("moves-input");
-const applyBtn = document.getElementById("apply-btn");
+const solveBtn = document.getElementById('solve-btn');
+const movesInput = document.getElementById('moves-input');
+const applyBtn = document.getElementById('apply-btn');
 // Pattern
-const patternSelect = document.getElementById("pattern-select");
-const setupBtn = document.getElementById("setup-btn");
-const selectedPatternText = document.getElementById("selected-pattern");
+const patternSelect = document.getElementById('pattern-select');
+const setupBtn = document.getElementById('setup-btn');
+const selectedPatternText = document.getElementById('selected-pattern');
 // Warning
-const errorSize = document.getElementById("error-size");
-const errorDir = document.getElementById("error-dir");
+const errorSize = document.getElementById('error-size');
+const errorDir = document.getElementById('error-dir');
 // Test
-const testBtn = document.getElementById("test-btn");
+const testBtn = document.getElementById('test-btn');
 
 const PATTERNS = {
-  "8-reg": [[[1, 2, 3], [4, 5, 6], [7, 8, 0]]],
-  "8-rev": [[[0, 1, 2], [3, 4, 5], [6, 7, 8]]],
-  "443-reg": [
+  '8-reg': [[[1, 2, 3], [4, 5, 6], [7, 8, 0]]],
+  '8-rev': [[[0, 1, 2], [3, 4, 5], [6, 7, 8]]],
+  '443-reg': [
     [[1, 2, 0, 0], [5, 6, 0, 0], [0, 0, 0, 0]],
     [[0, 0, 3, 4], [0, 0, 7, 8], [0, 0, 0, 0]],
     [[0, 0, 0, 0], [0, 0, 0, 0], [9, 10, 11, 0]]
   ],
-  "555-reg": [
+  '555-reg': [
     [[1, 2, 3, 0], [5, 6, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
     [[0, 0, 0, 4], [0, 0, 7, 8], [0, 0, 11, 12], [0, 0, 0, 0]],
     [[0, 0, 0, 0], [0, 0, 0, 0], [9, 10, 0, 0], [13, 14, 15, 0]]
   ],
-  "555-rev": [
+  '555-rev': [
     [[0, 1, 2, 3], [0, 0, 6, 7], [0, 0, 0, 0], [0, 0, 0, 0]],
     [[0, 0, 0, 0], [4, 5, 0, 0], [8, 9, 0, 0], [12, 0, 0, 0]],
     [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 10, 11], [0, 13, 14, 15]]
   ],
-  "663-reg": [
+  '663-reg': [
     [[1, 2, 0, 0], [5, 6, 0, 0], [9, 10, 0, 0], [0, 0, 0, 0]],
     [[0, 0, 3, 4], [0, 0, 7, 8], [0, 0, 11, 12], [0, 0, 0, 0]],
     [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [13, 14, 15, 0]]
@@ -95,10 +95,10 @@ let selectedPattern = null;
 let board = new Board(3, 3, true);
 board.attach(root);
 
-const solver = new Solver("js/worker.js", solverReady);
+const solver = new Solver('js/worker.js', solverReady);
 
-scrambleBtn.addEventListener("click", () => board.scramble());
-resetBtn.addEventListener("click", () => board.reset());
+scrambleBtn.addEventListener('click', () => board.scramble());
+resetBtn.addEventListener('click', () => board.reset());
 
 // Make sure the pattern and board match
 function validate() {
@@ -111,16 +111,16 @@ function validate() {
       pattern.width !== board.width || pattern.height !== board.height;
     const badDir = pattern.dir !== board.direction;
 
-    errorSize.style.display = badSize ? "block" : "none";
-    errorDir.style.display = badDir ? "block" : "none";
+    errorSize.style.display = badSize ? 'block' : 'none';
+    errorDir.style.display = badDir ? 'block' : 'none';
 
     solveBtn.disabled = badSize || badDir || !selectedPattern;
   }
 }
 
 function loadNewBoard() {
-  const width = Number(widthInput.value);
-  const height = Number(heightInput.value);
+  const width = Math.min(Math.max(Number(widthInput.value), 2), 10);
+  const height = Math.min(Math.max(Number(heightInput.value), 2), 10);
   const direction = directionInput.checked;
 
   board.detach(root);
@@ -130,10 +130,10 @@ function loadNewBoard() {
   validate();
 }
 
-boardBtn.addEventListener("click", loadNewBoard);
+boardBtn.addEventListener('click', loadNewBoard);
 
-applyBtn.addEventListener("click", () => {
-  const moves = fromMoves(movesInput.value.split(" "));
+applyBtn.addEventListener('click', () => {
+  const moves = fromMoves(movesInput.value.split(' '));
   board.applyMoves(moves, 100);
 });
 
@@ -146,41 +146,43 @@ function solverReady() {
 
     setupBtn.disabled = true;
     solveBtn.disabled = true;
-    selectedPatternText.innerHTML = "Loading pattern: " + pattern.name;
+    selectedPatternText.innerHTML = 'Loading pattern: ' + pattern.name;
 
     const before = selectedPattern
       ? solver.clean().then(() => Promise.resolve((selectedPattern = null)))
       : Promise.resolve();
-    await before.then(() => solver.setup(pattern.grids)).then(() => {
-      selectedPattern = patternSelect.value;
+    await before
+      .then(() => solver.setup(pattern.grids))
+      .then(() => {
+        selectedPattern = patternSelect.value;
 
-      widthInput.value = pattern.width;
-      heightInput.value = pattern.height;
-      directionInput.checked = pattern.dir;
+        widthInput.value = pattern.width;
+        heightInput.value = pattern.height;
+        directionInput.checked = pattern.dir;
 
-      setupBtn.disabled = false;
-      selectedPatternText.innerHTML = "Selected pattern: " + pattern.name;
-      validate();
-    });
+        setupBtn.disabled = false;
+        selectedPatternText.innerHTML = 'Selected pattern: ' + pattern.name;
+        validate();
+      });
   }
 
-  setupBtn.addEventListener("click", setupSolver);
+  setupBtn.addEventListener('click', setupSolver);
 
-  solveBtn.addEventListener("click", () => {
+  solveBtn.addEventListener('click', () => {
     setupBtn.disabled = true;
     solveBtn.disabled = true;
 
     const startBoard = board.getNums();
 
     solver.solve(startBoard).then(solution => {
-      movesInput.value = toMoves(solution).join(" ");
+      movesInput.value = toMoves(solution).join(' ');
 
       setupBtn.disabled = false;
       solveBtn.disabled = false;
     });
   });
 
-  testBtn.addEventListener("click", async () => {
+  testBtn.addEventListener('click', async () => {
     setupBtn.disabled = true;
     solveBtn.disabled = true;
 
@@ -191,7 +193,7 @@ function solverReady() {
     loadNewBoard();
 
     // load 555-reg
-    patternSelect.value = "555-reg";
+    patternSelect.value = '555-reg';
     await setupSolver();
 
     // solve all boards
@@ -200,13 +202,13 @@ function solverReady() {
 
       const startTime = performance.now();
       const solution = await solver.solve(b);
-      console.log("Time:", performance.now() - startTime);
+      console.log('Time:', performance.now() - startTime);
 
       await new Promise(resolve => setTimeout(resolve, 500));
       await board.applyMoves(solution, 50);
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-    console.log("Tests complete!");
+    console.log('Tests complete!');
   });
 }
