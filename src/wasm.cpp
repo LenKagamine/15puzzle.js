@@ -1,4 +1,5 @@
 #include <emscripten/bind.h>
+
 #include <chrono>
 #include <vector>
 
@@ -26,10 +27,12 @@ std::vector<int> solve(Vec2Int board) {
     auto solveEnd = std::chrono::steady_clock::now();
 
     std::cout << "Solve time taken: "
-             << (std::chrono::duration_cast<std::chrono::microseconds>(solveEnd - solveBegin)
-                    .count()) /
-                    1000000.0
-             << std::endl << std::endl;
+              << (std::chrono::duration_cast<std::chrono::microseconds>(
+                      solveEnd - solveBegin)
+                      .count()) /
+                     1000000.0
+              << std::endl
+              << std::endl;
 
     std::cout << "Solution: ";
     std::vector<int> solution;
@@ -42,9 +45,7 @@ std::vector<int> solve(Vec2Int board) {
     return solution;
 }
 
-void clean() {
-  delete search;
-}
+void clean() { delete search; }
 
 EMSCRIPTEN_BINDINGS(puzzle) {
     emscripten::function("_setup", &setup);

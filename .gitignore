@@ -2,3 +2,4 @@ obj/
 .static
 mime.types
 .DS_Store
+.vscode/
