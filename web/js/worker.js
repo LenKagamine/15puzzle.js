@@ -16,25 +16,28 @@ From worker thread:
   - when Module is loaded
 */
 
-const Module = {};
+var Module = {};
 
 Module.onRuntimeInitialized = () => {
   self.onmessage = ({ data }) => {
-    if (data.type === "SETUP") {
+    if (data.type === 'SETUP') {
       const { pattern } = data;
-      Module.setup(pattern);
-      self.postMessage({ type: "SETUP_DONE" });
-    } else if (data.type === "SOLVE") {
+      const grid = pattern.map(p => p.flat());
+      const width = pattern[0][0].length;
+      const height = pattern[0].length;
+      Module.setup(grid, width, height);
+      self.postMessage({ type: 'SETUP_DONE' });
+    } else if (data.type === 'SOLVE') {
       const { board } = data;
-      const solution = Module.solve(board);
-      self.postMessage({ type: "SOLVE_DONE", solution });
-    } else if (data.type === "CLEAN") {
+      const solution = Module.solve(board.flat());
+      self.postMessage({ type: 'SOLVE_DONE', solution });
+    } else if (data.type === 'CLEAN') {
       Module.clean();
-      self.postMessage({ type: "CLEAN_DONE" });
+      self.postMessage({ type: 'CLEAN_DONE' });
     }
   };
 
-  self.postMessage({ type: "READY" });
+  self.postMessage({ type: 'READY' });
 };
 
-self.importScripts("puzzle.js");
+self.importScripts('puzzle.js');

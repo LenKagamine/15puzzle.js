@@ -3,26 +3,21 @@
 
 #include <vector>
 
-template <class THeuristic, class TState>
+#include "Direction.h"
+
+template <class B>
 class Idastar {
 private:
-    using Move = typename TState::Move;
-
-    THeuristic* heuristic;
-    std::vector<Move> path;
+    std::vector<Direction> path;
     int minCost;
     int limit;
-    uint64_t nodes;
-    bool found;
+    long long nodes;
 
 public:
-    Idastar(THeuristic* h);
-    virtual ~Idastar();
+    Idastar();
 
-    std::vector<Move> solve(TState start);
-    bool dfs(TState& root, int g, Move prevMove);
+    std::vector<Direction> solve(const B& start);
+    bool dfs(B& root, int g, Direction prevMove);
 };
-
-#include "Idastar-inl.h"
 
 #endif

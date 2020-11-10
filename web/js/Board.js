@@ -66,10 +66,10 @@ function Board(width, height, direction) {
   };
 
   this.onKeyDown = e => {
-    if (e.code === 'KeyW' || e.code === 'ArrowUp') this.moveUp();
-    if (e.code === 'KeyD' || e.code === 'ArrowRight') this.moveRight();
-    if (e.code === 'KeyS' || e.code === 'ArrowDown') this.moveDown();
-    if (e.code === 'KeyA' || e.code === 'ArrowLeft') this.moveLeft();
+    if (e.code === 'ArrowUp') this.moveUp();
+    if (e.code === 'ArrowRight') this.moveRight();
+    if (e.code === 'ArrowDown') this.moveDown();
+    if (e.code === 'ArrowLeft') this.moveLeft();
   };
 
   this.detach = () => {
@@ -145,10 +145,10 @@ function Board(width, height, direction) {
     let index = 0;
 
     for (const move of moves) {
-      if (move === 1) this.moveDown();
-      else if (move === 2) this.moveLeft();
-      else if (move === 3) this.moveUp();
-      else if (move === 4) this.moveRight();
+      if (move === 0) this.moveDown();
+      else if (move === 1) this.moveLeft();
+      else if (move === 2) this.moveUp();
+      else if (move === 3) this.moveRight();
 
       if (delay > 0) {
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -157,8 +157,8 @@ function Board(width, height, direction) {
   };
 
   this.scramble = () => {
-    const randomMoves = [0 | (Math.random() * 4 + 1)];
-    const moves = { 1: [1, 2, 4], 2: [1, 2, 3], 3: [2, 3, 4], 4: [1, 3, 4] };
+    const randomMoves = [0 | (Math.random() * 4)];
+    const moves = [[0, 1, 3], [0, 1, 2], [1, 2, 3], [0, 2, 3]];
     for (let i = 1; i < 500; i++) {
       randomMoves.push(
         moves[randomMoves[randomMoves.length - 1]][0 | (Math.random() * 3)]

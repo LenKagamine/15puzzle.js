@@ -1,122 +1,123 @@
 #include "../include/Pattern.h"
 
-#include <iomanip>
-#include <iostream>
-#include <ostream>
-#include <vector>
+#include <numeric>
+#include <unordered_map>
 
-Pattern::Pattern(std::vector<std::vector<int>> g)
-    : WIDTH(g[0].size()), HEIGHT(g.size()) {
-    grid = 0;
-    for (int y = HEIGHT - 1; y >= 0; y--) {
-        for (int x = WIDTH - 1; x >= 0; x--) {
-            if (g[y][x] > 0) {
-                cells.push_back({x, y});
+PatternGroup::PatternGroup(const std::vector<int>& grid, int width, int height)
+    : WIDTH(width), HEIGHT(height), deltas(width * height, 1) {
+    auto length = width * height;
+
+    // Calculate starting ID and starting position
+    std::unordered_map<int, int> before;
+    std::vector<int> pos(length, 0);
+
+    for (int i = 0; i < length; i++) {
+        if (grid[i] > 0) {
+            // New tile found
+            int beforeCount = 0;
+
+            // Count number of preceding pattern tiles that's smaller
+            for (auto& it : before) {
+                if (it.first < grid[i]) {
+                    beforeCount++;
+                }
             }
-            grid = grid * 16 + g[y][x];
+
+            before[grid[i]] = beforeCount;
+            pos[grid[i]] = i;
+
+            // Store tile
+            tiles.push_back(grid[i]);
         }
     }
-}
 
-int Pattern::getCell(int x, int y) const {
-    int i = 4 * (y * WIDTH + x);
-    return ((grid & (0xfull << i)) >> i);
-}
-
-void Pattern::setCell(int x, int y, int n) {
-    int i = 4 * (y * WIDTH + x);
-    grid = (grid & ~(0xfull << i)) | ((uint64_t)n << i);
-}
-
-uint64_t Pattern::getId() {
-    return grid;
-}
-
-bool Pattern::canShift(int index, Direction dir) {
-    int cellX = cells[index].x;
-    int cellY = cells[index].y;
-
-    if (dir == Direction::U) {
-        return (cellY > 0 && getCell(cellX, cellY - 1) == 0);
+    // Calculate id
+    int j = length;
+    int id = 0;
+    for (auto tile : tiles) {
+        id *= j--;
+        id += pos[tile] - before[tile];
     }
-    else if (dir == Direction::R) {
-        return (cellX < WIDTH - 1 && getCell(cellX + 1, cellY) == 0);
-    }
-    else if (dir == Direction::D) {
-        return (cellY < HEIGHT - 1 && getCell(cellX, cellY + 1) == 0);
-    }
-    else {
-        return (cellX > 0 && getCell(cellX - 1, cellY) == 0);
+
+    initPattern = {pos, grid, id};
+
+    // Calculate deltas
+    for (int i = tiles.size() - 1; i--;) {
+        deltas[tiles[i]] = deltas[tiles[i + 1]] * (length - 1 - i);
     }
 }
 
-uint64_t Pattern::getShiftId(int index, Direction dir) {
-    if (!canShift(index, dir)) return 0;
+int PatternGroup::getCell(const Pattern& pattern, int position) const {
+    return pattern.grid[position];
+}
 
-    int cellX = cells[index].x;
-    int cellY = cells[index].y;
+void PatternGroup::setCell(Pattern& pattern, int position, int tile) {
+    pattern.grid[position] = tile;
+}
 
-    int i = 4 * (cellY * WIDTH + cellX);
-    int j = 0;
+bool PatternGroup::canShift(const Pattern& pattern, int tile,
+                            Direction dir) const {
+    auto posn = pattern.pos[tile];
 
     switch (dir) {
         case Direction::U:
-            j = 4 * ((cellY - 1) * WIDTH + cellX);
-            break;
+            return (posn >= WIDTH && getCell(pattern, posn - WIDTH) == 0);
         case Direction::R:
-            j = 4 * (cellY * WIDTH + (cellX + 1));
-            break;
+            return (posn % WIDTH < WIDTH - 1 &&
+                    getCell(pattern, posn + 1) == 0);
         case Direction::D:
-            j = 4 * ((cellY + 1) * WIDTH + cellX);
-            break;
-        case Direction::L:
-            j = 4 * (cellY * WIDTH + (cellX - 1));
-            break;
+            return (posn < WIDTH * (HEIGHT - 1) &&
+                    getCell(pattern, posn + WIDTH) == 0);
         default:
-            return 0;
+            return (posn % WIDTH > 0 && getCell(pattern, posn - 1) == 0);
     }
-
-    int temp = (grid & (0xfull << i)) >> i;
-    return (grid & ~(0xfull << i) & ~(0xfull << j)) | ((uint64_t)temp << j);
 }
 
-// Assumes canShift(index, dir)
-void Pattern::shiftCell(int index, Direction dir) {
-    int cellX = cells[index].x;
-    int cellY = cells[index].y;
-    int temp = getCell(cellX, cellY);
-    setCell(cellX, cellY, 0);
+int PatternGroup::getDelta(const Pattern& pattern, int tile, int offset) const {
+    return std::transform_reduce(pattern.grid.cbegin() + offset + 1,
+                                 pattern.grid.cbegin() + offset + WIDTH,
+                                 deltas[tile], std::plus<>(),
+                                 [this, &tile](const auto skip) {
+                                     if (skip == 0) {
+                                         return deltas[tile];
+                                     } else if (skip > tile) {
+                                         return deltas[tile] + deltas[skip];
+                                     } else {
+                                         return 0;
+                                     }
+                                 });
+}
+
+Pattern PatternGroup::shiftCell(Pattern next, int tile, Direction dir) {
+    // Position of tile
+    auto& posn = next.pos[tile];
+    // Clear tile
+    setCell(next, posn, 0);
 
     switch (dir) {
-        case Direction::U:
-            setCell(cellX, cellY - 1, temp);
-            cells[index].y--;
+        case Direction::U: {
+            posn -= WIDTH;
+            setCell(next, posn, tile);
+            next.id -= getDelta(next, tile, posn);
             break;
-        case Direction::R:
-            setCell(cellX + 1, cellY, temp);
-            cells[index].x++;
-            break;
-        case Direction::D:
-            setCell(cellX, cellY + 1, temp);
-            cells[index].y++;
-            break;
-        case Direction::L:
-            setCell(cellX - 1, cellY, temp);
-            cells[index].x--;
-            break;
-        default:
-            break;
-    }
-}
-
-Pattern::~Pattern() {}
-
-std::ostream& operator<<(std::ostream& out, const Pattern& pattern) {
-    for (int y = 0; y < pattern.HEIGHT; y++) {
-        for (int x = 0; x < pattern.WIDTH; x++) {
-            out << std::setw(3) << pattern.getCell(x, y);
         }
-        out << std::endl;
+        case Direction::R:
+            posn++;
+            setCell(next, posn, tile);
+            next.id += deltas[tile];
+            break;
+        case Direction::D: {
+            posn += WIDTH;
+            setCell(next, posn, tile);
+            next.id += getDelta(next, tile, posn - WIDTH);
+            break;
+        }
+        case Direction::L:
+            posn--;
+            setCell(next, posn, tile);
+            next.id -= deltas[tile];
+            break;
     }
-    return out;
+
+    return next;
 }

@@ -1,22 +1,31 @@
 CXX = em++
-CXXFLAGS = -std=c++14 -Wall -Werror \
-	-O3 --closure 1 --llvm-lto 1 -s FILESYSTEM=0 -s ENVIRONMENT=worker
+CXXFLAGS = -std=c++17 -Wall -Werror \
+	-O3 --closure 1 -s FILESYSTEM=0 -s ENVIRONMENT=worker \
+	-flto
 export EMCC_DEBUG=1
 
-web: obj/wasm.o obj/Board.o obj/DisjointDatabase.o obj/PartialDatabase.o obj/Pattern.o
+web: obj/wasm.o obj/Board.o obj/BoardRect.o obj/Direction.o obj/DisjointDatabase.o obj/Idastar.o obj/Pattern.o obj/WalkingDistance.o obj/Util.o
 	$(CXX) $(CXXFLAGS) --bind -o web/js/puzzle.js $^ \
 		--post-js src/post.js \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 
-obj/wasm.o: src/wasm.cpp include/Board.h include/DisjointDatabase.h include/Idastar.h include/Idastar-inl.h | obj
+obj/wasm.o: src/wasm.cpp | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-obj/Board.o: src/Board.cpp include/Board.h include/Point.h | obj
+obj/Board.o: src/Board.cpp | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-obj/DisjointDatabase.o: src/DisjointDatabase.cpp include/DisjointDatabase.h include/Board.h | obj
+obj/BoardRect.o: src/BoardRect.cpp | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-obj/PartialDatabase.o: src/PartialDatabase.cpp include/PartialDatabase.h include/Board.h include/Pattern.h include/flat_hash_map.h | obj
+obj/Direction.o: src/Direction.cpp | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-obj/Pattern.o: src/Pattern.cpp include/Pattern.h include/Direction.h | obj
+obj/DisjointDatabase.o: src/DisjointDatabase.cpp | obj
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+obj/Idastar.o: src/Idastar.cpp | obj
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+obj/Pattern.o: src/Pattern.cpp | obj
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+obj/WalkingDistance.o: src/WalkingDistance.cpp | obj
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+obj/Util.o: src/Util.cpp | obj
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 obj:

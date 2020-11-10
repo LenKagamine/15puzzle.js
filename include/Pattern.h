@@ -1,32 +1,38 @@
 #ifndef PATTERN_H
 #define PATTERN_H
 
-#include "Direction.h"
-#include "Point.h"
-
-#include <ostream>
+#include <cstdint>
+#include <unordered_map>
 #include <vector>
 
-class Pattern {
-private:
-    uint64_t grid;
+#include "Direction.h"
 
-    inline int getCell(int x, int y) const;
-    inline void setCell(int x, int y, int n);
+// Minimal state info
+struct Pattern {
+    std::vector<int> pos;   // Value to position mapping
+    std::vector<int> grid;  // Position to value mapping
+    int id;                 // distMap key
+};
+
+// Stores pre-computed values for family of Patterns
+class PatternGroup {
+    const int WIDTH;
+    const int HEIGHT;
+
+    std::vector<int> deltas;
+
+    int getDelta(const Pattern& ptn, int tile, int offset) const;
 
 public:
-    const int WIDTH, HEIGHT;
-    std::vector<Point> cells;
+    PatternGroup(const std::vector<int>& grid, int width, int height);
 
-    Pattern(std::vector<std::vector<int>> g);
-    virtual ~Pattern();
+    std::vector<int> tiles;
+    Pattern initPattern;  // Initial pattern
 
-    uint64_t getId();
-    bool canShift(int index, Direction dir);
-    uint64_t getShiftId(int index, Direction dir);
-    void shiftCell(int index, Direction dir);
-
-    friend std::ostream& operator<<(std::ostream& out, const Pattern& pattern);
+    int getCell(const Pattern& pattern, int position) const;
+    void setCell(Pattern& pattern, int position, int tile);
+    bool canShift(const Pattern& pattern, int tile, Direction dir) const;
+    Pattern shiftCell(Pattern next, int tile, Direction dir);
 };
 
 #endif  // PATTERN_H

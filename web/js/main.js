@@ -1,16 +1,17 @@
 'use strict';
 
 function toMoves(sol) {
-  const MOVES = ['Null', 'D', 'L', 'U', 'R'];
+  const MOVES = ['D', 'L', 'U', 'R'];
   return sol.map(m => MOVES[m]);
 }
 
 function fromMoves(moves) {
+  console.log(moves);
   const DIR = {
-    D: 1,
-    L: 2,
-    U: 3,
-    R: 4
+    D: 0,
+    L: 1,
+    U: 2,
+    R: 3
   };
   return moves.map(m => DIR[m]);
 }
